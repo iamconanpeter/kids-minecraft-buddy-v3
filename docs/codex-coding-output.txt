@@ -1,0 +1,191 @@
+```kotlin
+// Pure Kotlin domain model + engine logic (framework-agnostic, easy to unit test)
+
+enum class BlockType { DIRT, GRASS, WOOD, STONE }
+
+data class GridPos(val x: Int, val y: Int, val z: Int)
+
+data class MissionObjective(
+    val blockType: BlockType,
+    val targetCount: Int,
+    val progress: Int = 0
+)
+
+data class MissionState(
+    val missionId: String,
+    val title: String,
+    val objectives: List<MissionObjective>,
+    val isCompleted: Boolean = false,
+    val completedAtEpochMs: Long? = null
+)
+
+data class BuddyState(
+    val buddyId: String,
+    val name: String,
+    val mood: Int = 100,
+    val energy: Int = 100,
+    val inventory: Map<BlockType, Int> = emptyMap()
+)
+
+data class ProgressionState(
+    val level: Int = 1,
+    val totalXp: Int = 0,
+    val xpInLevel: Int = 0,
+    val stars: Int = 0,
+    val unlockedRewards: Set<String> = emptySet()
+)
+
+data class GameState(
+    val blocks: Map<GridPos, BlockType> = emptyMap(),
+    val buddy: BuddyState,
+    val mission: MissionState,
+    val progression: ProgressionState
+)
+
+fun tapPlaceBlock(
+    state: GameState,
+    pos: GridPos,
+    blockType: BlockType,
+    nowEpochMs: Long,
+    xpOnMissionComplete: Int = 50
+): GameState {
+    if (state.blocks.containsKey(pos)) return state
+    val currentCount = state.buddy.inventory[blockType] ?: 0
+    if (currentCount <= 0) return state
+
+    val nextBlocks = state.blocks + (pos to blockType)
+    val nextBuddy = state.buddy.copy(
+        inventory = state.buddy.inventory + (blockType to (currentCount - 1))
+    )
+
+    val nextMission = missionCompletionCheck(state.mission, nextBlocks, nowEpochMs)
+    val missionJustCompleted = !state.mission.isCompleted && nextMission.isCompleted
+    val nextProgression = if (missionJustCompleted) {
+        rewardLeveling(state.progression, earnedXp = xpOnMissionComplete, earnedStars = 1)
+    } else {
+        state.progression
+    }
+
+    return state.copy(
+        blocks = nextBlocks,
+        buddy = nextBuddy,
+        mission = nextMission,
+        progression = nextProgression
+    )
+}
+
+fun longPressRemoveBlock(
+    state: GameState,
+    pos: GridPos,
+    nowEpochMs: Long
+): GameState {
+    val removedType = state.blocks[pos] ?: return state
+
+    val nextBlocks = state.blocks - pos
+    val nextCount = (state.buddy.inventory[removedType] ?: 0) + 1
+    val nextBuddy = state.buddy.copy(
+        inventory = state.buddy.inventory + (removedType to nextCount)
+    )
+
+    val nextMission = missionCompletionCheck(state.mission, nextBlocks, nowEpochMs)
+
+    return state.copy(
+        blocks = nextBlocks,
+        buddy = nextBuddy,
+        mission = nextMission
+    )
+}
+
+fun missionCompletionCheck(
+    mission: MissionState,
+    blocks: Map<GridPos, BlockType>,
+    nowEpochMs: Long,
+    stickyCompletion: Boolean = true
+): MissionState {
+    val updatedObjectives = mission.objectives.map { objective ->
+        val count = blocks.values.count { it == objective.blockType }
+        objective.copy(progress = minOf(count, objective.targetCount))
+    }
+
+    val doneNow = updatedObjectives.all { it.progress >= it.targetCount }
+    val completed = if (stickyCompletion) mission.isCompleted || doneNow else doneNow
+
+    val completedAt = when {
+        stickyCompletion && mission.completedAtEpochMs != null -> mission.completedAtEpochMs
+        completed -> nowEpochMs
+        else -> null
+    }
+
+    return mission.copy(
+        objectives = updatedObjectives,
+        isCompleted = completed,
+        completedAtEpochMs = completedAt
+    )
+}
+
+fun rewardLeveling(
+    progression: ProgressionState,
+    earnedXp: Int,
+    earnedStars: Int = 0,
+    xpPerLevel: Int = 100
+): ProgressionState {
+    require(earnedXp >= 0) { "earnedXp must be >= 0" }
+    require(earnedStars >= 0) { "earnedStars must be >= 0" }
+    require(xpPerLevel > 0) { "xpPerLevel must be > 0" }
+
+    val newTotalXp = progression.totalXp + earnedXp
+    val newLevel = (newTotalXp / xpPerLevel) + 1
+    val newXpInLevel = newTotalXp % xpPerLevel
+
+    val newRewards = ((progression.level + 1)..newLevel)
+        .map { "LEVEL_${it}_BADGE" }
+        .toSet()
+
+    return progression.copy(
+        level = newLevel,
+        totalXp = newTotalXp,
+        xpInLevel = newXpInLevel,
+        stars = progression.stars + earnedStars,
+        unlockedRewards = progression.unlockedRewards + newRewards
+    )
+}
+```
+
+```kotlin
+// Local save snapshot model (storage-format-friendly)
+
+data class BlockSnapshot(
+    val x: Int,
+    val y: Int,
+    val z: Int,
+    val type: BlockType
+)
+
+data class LocalSaveSnapshot(
+    val schemaVersion: Int = 1,
+    val savedAtEpochMs: Long,
+    val blocks: List<BlockSnapshot>,
+    val buddy: BuddyState,
+    val mission: MissionState,
+    val progression: ProgressionState
+)
+
+fun GameState.toLocalSaveSnapshot(savedAtEpochMs: Long): LocalSaveSnapshot =
+    LocalSaveSnapshot(
+        savedAtEpochMs = savedAtEpochMs,
+        blocks = blocks.map { (pos, type) -> BlockSnapshot(pos.x, pos.y, pos.z, type) },
+        buddy = buddy,
+        mission = mission,
+        progression = progression
+    )
+
+fun LocalSaveSnapshot.toGameState(): GameState =
+    GameState(
+        blocks = blocks.associate { GridPos(it.x, it.y, it.z) to it.type },
+        buddy = buddy,
+        mission = mission,
+        progression = progression
+    )
+```
+
+These functions are all pure (no Android dependencies), so you can unit test them with plain JUnit.

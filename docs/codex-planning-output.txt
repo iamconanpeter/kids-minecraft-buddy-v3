@@ -1,0 +1,54 @@
+As of **February 20, 2026**, here’s a practical design brief.
+
+1. **Comparable landscape (Android, iOS, browser/online)**
+- **Android UGC/social-heavy:** `Roblox` (Teen, 1B+ downloads, IAP), `PK XD` (Everyone 10+, 100M+ downloads, ads + IAP), `Minecraft` (Everyone 10+, 50M+, paid + IAP).  
+- **iOS split by safety posture:** `Roblox` (13+, UGC/chat/loot-box descriptors), `Minecraft` (9+, paid + IAP), `Toca Boca World` (4+, single-player, ad-free claim, heavy IAP).
+- **Browser/online worlds:** `Minecraft Classic` runs in-browser (keyboard/WebGL/WebRTC required), `KoGaMa` positions itself as browser-first UGC with multiplayer + creation.
+- **Inference from this landscape:** For ages 6-7, the biggest whitespace is **Minecraft-like creativity + Toca-like safety defaults**, before opening full UGC/social risk.
+
+2. **Why kids love these loops (psychology)**
+- **Autonomy:** Kids can choose “what to build next,” which increases intrinsic motivation.
+- **Competence:** Quick mastery loops (build, solve, upgrade) produce strong “I can do this” momentum.
+- **Relatedness:** Buddy play and co-op goals satisfy social connection, even with light AI companions.
+- **Pretend-play identity:** Roleplay (builder, explorer, hero) supports creativity, language, and social skill practice.
+- **Creator-style attachment:** Kids form para-social bonds with funny/high-energy personalities; character-driven “buddy narration” boosts return behavior.
+
+3. **Five moat opportunities (legally safer block-play buddy app)**
+- **Trust moat:** Ship with no open chat, no external DMs, parent dashboard, spending caps, and session controls from day one.
+- **Co-play moat:** “2-buddy adventures” that require turn-taking puzzles (parent/child or sibling), not just solo grind.
+- **Content moat:** Procedural mission remix engine (same blocks, infinite kid-safe stories) so novelty doesn’t rely on risky UGC.
+- **Safety-tech moat:** Template-based sharing only (no free text/images by default), with pre-moderated asset libraries.
+- **Ethics moat:** Transparent rewards (no loot-box pressure), clear earn paths, and parent-visible progression logs.
+
+4. **Legal-safe translation of JJ & Mikey-style patterns**
+- **Pattern: high-energy duo chaos** -> **Translate:** original buddy duo archetypes with your own names, art bible, voice style.
+- **Pattern: escalating “rescue/challenge” episodes** -> **Translate:** short mission arcs (5-8 min) with clear start-win-reset loop.
+- **Pattern: prank/surprise moments** -> **Translate:** slapstick world events with no humiliation, no unsafe imitation prompts.
+- **Pattern: creator callouts/catchphrases** -> **Translate:** brand-new catch-lines and UI language; never reuse signature phrases.
+- **Pattern: “watch me do this” social pull** -> **Translate:** in-app replay ghosts and parent-approved challenge cards, not open social feeds.
+
+**Non-negotiable guardrails**
+- Don’t copy names, thumbnails, skins, logos, or channel-identifying motifs (copyright/trademark risk).
+- Assume kids under 13 handling must satisfy COPPA updates (including stricter ad-data consent rules).
+- Align with Apple Kids category and Google Play Families requirements before feature scope freeze.
+- Treat this as product guidance, then get counsel review before launch.
+
+**Sources**
+- Minecraft iOS: https://apps.apple.com/us/app/minecraft/id479516143  
+- Minecraft Android: https://play.google.com/store/apps/details?id=com.mojang.minecraftpe  
+- Roblox Android: https://play.google.com/store/apps/details?id=com.roblox.client  
+- Roblox iOS: https://apps.apple.com/us/app/roblox/id431946152  
+- Toca Boca World iOS: https://apps.apple.com/us/app/toca-boca-world/id1208138685  
+- PK XD Android: https://play.google.com/store/apps/details?id=com.movile.playkids.pkxd  
+- Minecraft Classic browser: https://classic.minecraft.net/  
+- KoGaMa company/platform info: https://multiverseaps.com/index.html  
+- Roblox safety/parent controls: https://about.roblox.com/parental-controls  
+- Roblox Nov 18, 2024 safety update: https://about.roblox.com/newsroom/2024/11/major-updates-to-our-safety-systems-and-parental-controls  
+- FTC COPPA 2025 update: https://www.ftc.gov/news-events/news/press-releases/2025/01/ftc-finalizes-changes-childrens-privacy-rule-limiting-companies-ability-monetize-kids-data  
+- Federal Register COPPA final rule (effective/compliance dates): https://www.govinfo.gov/content/pkg/FR-2025-04-22/pdf/FR-2025-04-22.pdf  
+- U.S. Copyright basics: https://copyright.gov/what-is-copyright/  
+- USPTO likelihood of confusion: https://www.uspto.gov/trademarks/search/likelihood-confusion  
+- Apple Kids guidance: https://developer.apple.com/kids/  
+- Google Play Families policy: https://support.google.com/googleplay/android-developer/answer/9893335  
+- Tween parasocial YouTuber research: https://pubmed.ncbi.nlm.nih.gov/31920829/  
+- SDT and game enjoyment study: https://doi.org/10.1016/j.chb.2017.03.048
