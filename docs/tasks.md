@@ -29,7 +29,7 @@ Legend:
   - **Acceptance criteria:** implementation approach, quality gates, risks/mitigations.
 - [x] Create `docs/architecture-diagram.md`
   - **Acceptance criteria:** component and state architecture shown.
-- [ ] Create/update `docs/tasks.md` with final done state
+- [x] Create/update `docs/tasks.md` with final done state
   - **Acceptance criteria:** all delivered work accurately reflected as done.
 
 ## Phase 3 — Implementation (Android only)
@@ -58,7 +58,7 @@ Legend:
 
 - [x] Add `docs/release-summary.md`
   - **Acceptance criteria:** includes what changed, audience fit, quality outputs, limitations, codex evidence snippets.
-- [ ] Commit changes
+- [x] Commit changes
   - **Acceptance criteria:** git commit created on `main` branch.
-- [ ] Push to `github.com/iamconanpeter/kids-minecraft-buddy-v3`
+- [x] Push to `github.com/iamconanpeter/kids-minecraft-buddy-v3`
   - **Acceptance criteria:** remote contains final commit.
